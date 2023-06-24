@@ -129,11 +129,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
--- CREATE TABLE usuario(
--- 	id int AUTO_INCREMENT PRIMARY KEY,
---     nome varchar(30) NOT null,
---     login varchar(10) NOT null,
---     senha varchar(220) not null,
---     UNIQUE index idx_login(login)
--- )ENGINE=INNODB charset=UTF8 COLLATE=UTF8_unicode_ci;

@@ -5,37 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem de Filmes</title>
-    <!-- bootstrap  -->
-    <link rel="stylesheet" href="bibliotecas/cssModal/bootstrap.min.css">
-    <link rel="stylesheet" href="bibliotecas/font-awesome/css/font-awesome.min.css">
-    <script src="bibliotecas/jsModal/jquery-3.5.1.min.js"></script>
-    <script src="bibliotecas/jsModal/bootstrap.min.js"></script>
-    <!--  -->
+    <!-- bootstrap v3.4.1 -->
+	<link rel="stylesheet" type="text/css" href="bibliotecas/cssModal/bootstrap.min.css">
+	<!-- fontawesome v5.15.1 https://fontawesome.com/v5.15.1/icons?d=listing -->
+	<link rel="stylesheet" type="text/css" href="bibliotecas/font-awesome/css/font-awesome.css">
+	<script src="bibliotecas/jsModal/jquery-3.5.1.min.js"></script>
+	<script src="bibliotecas/jsModal/bootstrap.min.js"></script>
     <link rel="stylesheet" href="estilo/estilo.css" /> 
 </head>
 <body>
     <nav>
         <ul class="menu">
-            <li>
+            <li>    
                 <button id="btn-home-jquery" class="btn btn-primary btn-sm">
-                    <i class="fa fa-home" aria-hidden="true"></i>
-                    &nbsp;Home
-                </button>
+                <i class="fa fa-home" aria-hidden="true"></i>
+                &nbsp;Home</button>
             </li>
-            <li>
+            <li>    
                 <button id="btn-novo-jquery" class="btn btn-primary btn-sm">
-                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                    &nbsp;Adicionar novo filme
-                </button>
+                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                &nbsp;Inserir novo filme</button>
             </li>
         </ul>
     </nav>
     <main>
         <h2 class="titulo">Lista de Filmes assistidos</h2>
         <hr/>
-        <div id="erro">
-            <span id="msgErro"></span> <!--Exibição em vermelho-->
-            <span id="msgSucesso"></span> <!--Exibição em azul-->
+        <div class="msg">
+            <span id="msg"></span> 
         </div> 
         <table id="tblFilmes">
         <thead>
@@ -46,79 +43,74 @@
         </tbody>
         </table>
         <br/>
-        <!-- modal para o formulario de inserir -->
-        <div class="modal fade" id="modal-formulario" role="dialog">
+        <!-- Modal para o formulário de inserir-->
+        <div class="modal fade" id="modal-formulario-inserir" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="form-titulo">Inserir novo filme</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span>x</span></button>
                     </div>
-                    <div class="modal-body" id="formulario" style="background-color: lightgrey;">
+                    <div class="modal-body" id="formulario" style="background-color:lightgrey;">
+                        <!-- AQUI FICARÁ O FORMULÁRIO -->
                         <form id="form-inserir">
-                            <input type="hidden" name="id">
-                            Titulo: <input type="text" name="titulo" id="titulo" size="35">
+                            <input type="hidden" name="id" />
+                            Título: <input type="text" name="titulo" id="titulo" size="35"/>
                             Gênero: <select name="cmbGeneros" id="cmbGeneros">
                                 <option value="0">-- Escolha --</option>
                             </select><br><br>
-                            Avaliação: <input type="number" min="0" max="10" step="0.1" name="avaliacao" id="avaliacao">
-                            <input type="submit" value="Enviar" id="enviar">
-                            <input type="reset" value="Limpar">
+                            Avaliação: <input type="number" min="0" max="10" step="0.1" name="avaliacao" id="avaliacao" />
+                            <input type="submit" value="Enviar" id="enviar"/>
+                            <input type="reset" value="Limpar" />
                         </form>
-                        <!-- Final do formulario -->
+                        <!-- FIM DO FORMULÁRIO --> 
                     </div>
                     <div class="modal-footer">
-                        <button id="btn-fechar-jquery" class="btn btn-danger btn-sm">Fechar</button>
+                        <button type="button" id="btn-fechar-jquery" class="btn btn-danger btn-sm">Fechar</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Moal para o formulario alterar -->
-
+        <!-- Modal para o formulário de alterar-->
         <div class="modal fade" id="modal-formulario-alterar" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="form-titulo">Alterar filme existente</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span>x</span></button>
                     </div>
-                    <div class="modal-body" id="formulario-alterar" style="background-color: lightgrey;">
-                        <!-- Formulário alterar -->
+                    <div class="modal-body" id="formulario-alterar" style="background-color:lightgrey;">
+                        <!-- AQUI FICARÁ O FORMULÁRIO ALTERAR-->
                         <form id="form-alterar">
-                            <input type="hidden" name="id">
-                            ID: <input type="text" size="2" name="id" id="id" readonly>
-                            Título: <input type="text" name="titulo" id="titulo">
+                            Id: <input type="text" size="2" name="id" id="id" readonly/>
+                            Título: <input type="text" name="titulo" id="titulo"/>
                             Gênero: <select name="cmbGeneros" id="cmbGeneros">
                                 <option value="0">-- Escolha --</option>
                             </select><br><br>
-                            Avaliação: <input type="number" min="0" max="10" step="0.1" name="avaliacao" id="avaliacao">
-                            <input type="submit" value="Alterar" id="alterar">
-                            <input type="reset" value="Cancelar" id="cancelar">
+                            Avaliação: <input type="number" min="0" max="10" step="0.1" name="avaliacao" id="avaliacao" />
+                            <input type="submit" value="Alterar" id="alterar"/>
+                            <input type="reset" value="Cancelar" id="cancelar" />
                         </form>
-                        <!-- Fim do formulario alterar -->
+                        <!-- FIM DO FORMULÁRIO ALTERAR--> 
                     </div>
                     <div class="modal-footer">
-                        <button id="btn-fechar-jquery-alterar" class="btn btn-danger btn-sm">Fechar</button>
+                        <button type="button" id="btn-fechar-jquery-alterar" class="btn btn-danger btn-sm">Fechar</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- fim do modal para o formulario alterar -->
+        <!-- fim de Modal para o formulário de alterar-->
     </main>
     <footer>
-    
+        <hr/>
+        Todos os direitos reservados
     </footer>
-    <script>
-        $("#btn-home-jquery").click(function(){
-            window.location.href = "index.html"
-        })
-    </script>
-
-    <!-- <script src="filmesjs/excluir.js"></script> -->
-    
-    <script src="filmesjs/listar.js"></script>
-    <script src="filmesjs/excluir.js"></script>
-    <script src="filmesjs/inserir.js"></script>
-    <script src="filmesjs/buscar.js"></script>
-    <script src="filmesjs/alterar.js"></script>
+    <script type="module" src="utilJs/funcoesUtil.js"></script>
+    <script src="usuariosJs/verificar.js"></script>
+    <script type="module" src="filmesjs/listar.js" ></script>
+    <script type="module" src="filmesjs/excluir.js" ></script>
+    <script type="module" src="filmesjs/inserir.js" ></script>
+    <script type="module" src="filmesjs/buscar.js" ></script>
+    <script type="module" src="filmesjs/alterar.js" ></script>
 </body>
 </html>

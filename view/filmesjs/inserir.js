@@ -1,117 +1,105 @@
+import { exibirMensagemErro, exibirMensagem, limparSpan } from "../utilJs/funcoesUtil.js";
+import { filmeListarFetch } from "./listar.js";
 
-// Controlando o modal de inserir com jquery 
-$("#btn-novo-jquery").click(function(){
-    filmeListarGeneroInserirFetch()
-    $("#modal-formulario").modal({backdrop: 'static'})
-    $("#modal-formulario").modal('show')
-
+//Recupera o elemento (Também poderíamos usar o form e o evento submit)        
+const $btnEnviar = document.querySelector('#enviar');
+$btnEnviar.addEventListener('click', function(event){
+    event.preventDefault();    
+    filmeInserirFetch();
+    $("#modal-formulario-inserir").modal('hide');
 })
 
-$("#btn-fechar-jquery").click(function(){
-    $("#modal-formulario").modal({backdrop: 'static'})
-    $("#modal-formulario").modal('hide')
-})
-
-const $btnEnviar = document.querySelector('#enviar')
-$btnEnviar.addEventListener('click', function(event) {
-    event.preventDefault()
-    filmeInserirFetch()
-    $('#modal-formulario').modal('hide')
-})
-
-let filmeListarGeneroInserirFetch = function() {
-    fetch('../controller/generoListar.php')
-        .then(function(resposta) {
-            if(!resposta.ok === true){
-                let msg = resposta.status + ' - ' + resposta.statusText
-                throw new Error(msg)
-
-            } else {
-                return resposta.json()
-            }
+//Carregando os generos no combo 
+let filmeListarGeneroInserirFetch = function(){
+     fetch("../controller/generoListar.php")
+        .then(function(resposta){
+            if(!resposta.ok===true){
+                if(resposta.status===401)
+                    window.location.href = "../view/index.html";
+                let msg = resposta.status + " - " + resposta.statusText;
+                throw new Error(msg); 
+            }else
+                return resposta.json(); 
         })
-
         .then(function(respostaJSON){
-            if(respostaJSON.erro === false)
-                cbSucessoListarGeneroInserir(respostaJSON)
+            if(respostaJSON.erro===false)
+                fcSucessoListarGeneroInserir(respostaJSON);
             else
-                cbErroListarGeneroInserir(respostaJSON.msgErro)
+                fcErroListarGeneroInserir(respostaJSON.msgErro);
         })
-
         .catch(function(erro){
-            document.querySelector('#msgErro').textContent = erro
-        })
+            exibirMensagemErro('#msg',erro);
+        });
+};
+//funções que poderiam ser de callback p/ listar os gêneros no select do form
+function fcSucessoListarGeneroInserir(respostaJSON){
+    montarSelect(respostaJSON.dados);
 }
-
-function cbSucessoListarGeneroInserir(respostaJSON) {
-    montarSelect(respostaJSON.dados)
+function fcErroListarGeneroInserir(erro){
+    exibirMensagemErro('#msg',erro);
 }
-
-function cbErroListarGeneroInserir(erro) {
-    document.querySelector('#msgErro').textContent = erro
-}
-
-function montarSelect(dados) {
-    document.querySelector("#cmbGeneros").innerHTML = ""
-    for(const i in dados){
-        let genero = dados[i]
-        let $opt = document.createElement('option')
-
-        $opt.value = genero.id
-        $opt.textContent = genero.descricao
-
-        document.querySelector('#cmbGeneros').appendChild($opt)
+//Monta o select de gêneros
+function montarSelect(dados){
+    //Limpa o select
+    document.querySelector('#cmbGeneros').innerHTML="";
+    //Preenche o select com os generos recebidos (dados)
+    for (const i in dados) {
+        let genero = dados[i];
+        let $opt = document.createElement('option');
+        $opt.value= genero.id;
+        $opt.textContent = genero.descricao;
+        document.querySelector('#cmbGeneros').appendChild($opt);
     }
 }
 
-let filmeInserirFetch = function() {
+//fetch enviando o filme a ser inserido
+let filmeInserirFetch = function(){
+    //Monta um objeto filme recuperando os elementos do DOM
     let filme = {
         "titulo": document.querySelector('#titulo').value,
-        "avaliacao": parseFloat(document.querySelector('#avaliacao').value),
-        "genero_id": parseInt(document.querySelector('#cmbGeneros').value)
-
-    }
-
+        "avaliacao" : parseFloat(document.querySelector('#avaliacao').value),
+        "genero_id" : parseInt(document.querySelector('#cmbGeneros').value)
+    };
     let configMetodo = {
-        method: "POST", 
-        body: JSON.stringify(filme),
-        headers: {"Content-Type": "application/json;charset=UTF-8"}
-    }
-
+        method : "POST"
+        ,body : JSON.stringify(filme)
+        ,headers :  {"Content-Type" : "application/json;charset=UTF-8"}
+    };
     fetch("../controller/filmeInserir.php", configMetodo)
-        .then(function(resposta) {
-            if(!resposta === true) {
-                let msg = resposta.status + ' - ' + resposta.statusText
-                throw new Error(msg)
-            } else {
-                return resposta.json()
-            }
+        .then(function(resposta){
+            if(!resposta.ok===true){
+                if(resposta.status===401)
+                    window.location.href = "../view/index.html";
+                let msg = resposta.status + " - " + resposta.statusText;
+                throw new Error(msg); 
+            }else
+                return resposta.json();        
         })
-
-        .then(function(respostaJSON) {
-            if(respostaJSON.erro === false)
-                cbSucessoInserirFilme(respostaJSON)
+        .then(function(respostaJSON){
+            if(respostaJSON.erro===false)
+                fcSucessoInserirFilme(respostaJSON);
             else
-                cbErroInserirFilme(respostaJSON.msgErro)
+                fcErroInserirFilme(respostaJSON.msgErro);
         })
-
         .catch(function(erro){
-            cbErroInserirFilme(erro)
-        }) 
-}
+            fcErroInserirFilme(erro);
+        });
+};
 
-function cbSucessoInserirFilme(respostaJSON){
-    document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso
+function fcSucessoInserirFilme(respostaJSON){
+    exibirMensagem('#msg',respostaJSON.msgSucesso);
     setTimeout(function(){
-        limpaSpans()
-        filmeListarFetch()
-
-    }, 2000)
+        limparSpan('#msg');
+        filmeListarFetch();
+    },1500);
 }
 
-function cbErroInserirFilme(erro) {
-    document.querySelector('#msgErro').textContent = erro
+function fcErroInserirFilme(erro){
+    exibirMensagemErro('#msg',erro);
     setTimeout(function(){
-        limparSpans()
-    }, 1500)
+        limparSpan('#msgS');
+    },1500);
 }
+
+export {filmeListarGeneroInserirFetch}
+

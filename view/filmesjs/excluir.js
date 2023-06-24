@@ -1,47 +1,52 @@
-function filmeExcluirFetch(id) {
-    if(confirm('Confirmar exclusão do filme com id: ' + id + '?')){
-        let filme = {"id": id}
+import { exibirMensagem, exibirMensagemErro, limparSpan } from "../utilJs/funcoesUtil.js";
+import { filmeListarFetch } from "./listar.js";
+
+function filmeExcluirFetch(id){
+    if(confirm('Confirma a exclusão do filme de id '+id+'?')){ 
+        let filme = {"id": id};
         let configMetodo = {
-            method: "DELETE",
-            body: JSON.stringify(filme),
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8"
+            method : "DELETE",
+            body : JSON.stringify(filme), //texto JSON serializado
+            headers :  {
+                "Content-Type" : "application/json;charset=UTF-8"
             }
-        }
+        };
 
         fetch("../controller/filmeExcluir.php", configMetodo)
-            .then(function(resposta) {
-                if(!resposta.ok === true) {
-                    let msg = resposta.status + " - " + resposta.statusText
-                    throw new Error(msg)
-                } else
-                    return resposta.json()
+            .then(function(resposta){
+                if(!resposta.ok===true){
+                    if(resposta.status===401)
+                        window.location.href = "../view/index.html";
+                    let msg = resposta.status + " - " + resposta.statusText;
+                    throw new Error(msg); 
+                }else
+                    return resposta.json();        
             })
             .then(function(respostaJSON){
-                if(respostaJSON.erro === false)
-                    cbSuccessoExcluirFilme(respostaJSON)
+                if(respostaJSON.erro===false)
+                    fcSucessoExcluirFilme(respostaJSON);
                 else
-                    cbErroExcluirFilme(resposta.msgErro)
+                    fcErroExcluirFilme(respostaJSON.msgErro);
             })
             .catch(function(erro){
-                document.querySelector("#msgErro").textContent = erro
-            })
+                exibirMensagemErro('#msg',erro);
+            });
     }
 }
 
-function cbSuccessoExcluirFilme(respostaJSON) {
-    document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso
+function fcSucessoExcluirFilme(respostaJSON){
+    exibirMensagem('#msg',respostaJSON.msgSucesso);
     setTimeout(function(){
-        limpaSpans()
-        filmeListarFetch()
-        
-    }, 3500)
+        limparSpan('#msg');
+        filmeListarFetch();
+    },1500); 
 }
 
-function cbErroExcluirFilme(respostaJSON) {
-    document.querySelector('#msgErro').textContent = respostaJSON.msgErro
+function fcErroExcluirFilme(erro){
+    exibirMensagemErro('#msg',erro);
     setTimeout(function(){
-        limpaSpans()
-
-    }, 1500)
+        limparSpan('#msg');
+    },1500); 
 }
+
+export {filmeExcluirFetch}

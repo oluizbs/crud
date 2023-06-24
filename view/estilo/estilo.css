@@ -30,19 +30,29 @@ table, th, td {
     width: 70%;
     margin: 0px auto; /* centraliza na horizontal */
 }
+
+.tblListagem {
+    width: 70%;
+    margin: 0px auto; /* centraliza na horizontal */
+}
 th, td{
     width: auto;
 }
-#erro{
+span{
     text-align: center;
-}
-#msgErro{
-    color: red;
-}
-#msgSucesso{
-    color: navy;
 }
 footer{
     text-align: center;
     font-size: smaller;
+}
+.msg{
+    text-align: center;
+}
+.msgErro{
+    color: red;
+    text-align: center;
+}
+.msgSucesso{
+    color: navy;
+    text-align: center;
 }

@@ -1,58 +1,50 @@
-function generoExcluirFetch(id){
+import { exibirMensagem, exibirMensagemErro, limparSpan } from "../utilJs/funcoesUtil.js";
+import { generoListarFetch } from "./listar.js";
+
+function generoExcluirFetch(id){    
     if(confirm('Confirma a exclusão do genero de id '+id+'?')){ 
         let genero = {"id": id};
         let configMetodo = {
-            method: "DELETE",
-            body: JSON.stringify(genero),
-            headers:{
-                "Content-Type": "application/json;charset=UTF-8"
-            }
+            method: "DELETE"
+            ,body: JSON.stringify(genero)
+            ,headers:{"Content-Type": "application/json;charset=UTF-8"}
         };
 
-        //fetch enviando o id do genero a ser excluído
         fetch("../controller/generoExcluir.php", configMetodo)
             .then(function(resposta){
                 if(!resposta.ok===true){
+                    if(resposta.status===401)
+                        window.location.href = "../view/index.html";
                     let msg = resposta.status + " - " + resposta.statusText;
-                    // document.querySelector('#msgErro').textContent = msg;
-                    throw new Error(msg)
+                    throw new Error(msg);
                 }else
                     return resposta.json();
             })
             .then(function(respostaJSON){
                 if(respostaJSON.erro===false)
-                    cbSucessoExcluirGenero(respostaJSON);
+                    fcSucessoExcluirGenero(respostaJSON);
                 else
-                cbErroExcluirGenero(respostaJSON.msgErro)
-                // document.querySelector('#msgErro').textContent = respostaJSON.msgErro;
+                    fcErroExcluirGenero(respostaJSON.msgErro);
             })
             .catch(function(erro){
-                cbErroExcluirGenero(erro)
-                // document.querySelector('#msgErro').textContent = erro;
+                fcErroExcluirGenero(erro);
             })
     }
 }
 
-//Função de callback
-function cbSucessoExcluirGenero(respostaJSON){
-    document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso;
-    //Em seguida, redirecione para a página principal
+function fcSucessoExcluirGenero(respostaJSON){
+    exibirMensagem('#msg',respostaJSON.msgSucesso);
     setTimeout(function(){
-        limpaSpans()
-        generoListarFetch()
-        // window.location.href = "../view/generos.html";
-    },1500); 
-}
-// 
-function cbErroExcluirGenero(erro){
-    document.querySelector('#msgErro').textContent = erro
-    setTimeout(function(){
-        limpaSpans()
+        limparSpan('#msg');
+        generoListarFetch();
     },1500); 
 }
 
-function limpaSpans() {
-    document.querySelector('#msgErro').textContent = ""
-    document.querySelector('#msgSucesso').textContent = ""
+function fcErroExcluirGenero(erro){
+    exibirMensagemErro('#msg',erro);
+    setTimeout(function(){
+        limparSpan('#msg');
+    },1500); 
 }
-// 
+
+export {generoExcluirFetch};

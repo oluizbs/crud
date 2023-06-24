@@ -1,66 +1,65 @@
+import { exibirMensagem, exibirMensagemErro, limparSpan } from "../utilJs/funcoesUtil.js";
+import { generoListarFetch } from "./listar.js";
+
 //Recupera o botão alterar (Também poderíamos usar o form e o evento submit)        
 const $btnAlterar = document.querySelector('#alterar');
 $btnAlterar.addEventListener('click', function(event){
     event.preventDefault();
-    generoAlterarFetch()
-    $("#modal-formulario-alterar").modal('hide')
+    generoAlterarFetch();
+    $("#modal-formulario-alterar").modal('hide');
 });
 
 let generoAlterarFetch = function(){
-    let formAlterar = document.querySelector("#form-alterar")
+    let formAlterar = document.querySelector('#form-alterar');
     let genero = {
         "id": formAlterar.querySelector('#id').value,
         "descricao": formAlterar.querySelector('#descricao').value
     };
-    
-let configMetodo = {
-        method: "PUT",
-        body: JSON.stringify(genero),
-        headers: {
-            "Content-Type":"application/json;charset=UTF-8"
-        }
+    let configMetodo = {
+        method: "PUT"
+        ,body: JSON.stringify(genero)
+        ,headers: {"Content-Type":"application/json;charset=UTF-8"}
     };
-    //fetch enviando o genero a ser alterado
+
     fetch("../controller/generoAlterar.php", configMetodo)
         .then(function(resposta){
             if(!resposta.ok===true){
+                if(resposta.status===401)
+                    window.location.href = "../view/index.html";
                 let msg = resposta.status + " - " + resposta.statusText;
-                throw new Error(msg)
-                // document.querySelector('#msgErro').textContent = msg;
+                throw new Error(msg);
             }
             else
                 return resposta.json();
         })
         .then(function(respostaJSON){
             if(respostaJSON.erro===false)
-                cbSucessoAlterarGenero(respostaJSON);
+                fcSucessoAlterarGenero(respostaJSON);
             else
-            cbSErroAlterarGenero(respostaJSON.msgErro);
+                fcErroAlterarGenero(respostaJSON.msgErro);
         })
         .catch(function(erro){
-            document.querySelector('#msgErro').textContent = erro;
+            fcErroAlterarGenero(erro);
         });
 }
 
-//Recupera o botão cancelar
 const $btnCancelar = document.querySelector('#cancelar');
-$btnCancelar.addEventListener('click', function(){
+$btnCancelar.addEventListener('click',function(){
     if(confirm('Deseja mesmo cancelar a alteração?'))
         window.location.href = "../view/generos.html";
 })
 
-//Função de callback
-function cbSucessoAlterarGenero(respostaJSON){
-    document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso;
+function fcSucessoAlterarGenero(respostaJSON){
+    exibirMensagem('#msg',respostaJSON.msgSucesso);
     setTimeout(function(){
-        limpaSpans()
-        generoListarFetch()
-    }, 1500);
+        limparSpan('#msg');
+        generoListarFetch();
+    },1500);
 }
 
-function cbErroAlterarGenero(erro){
-    document.querySelector("#msgErro").textContent = erro
+function fcErroAlterarGenero(erro){
+    exibirMensagemErro('#msg',erro);
     setTimeout(function(){
-        limpaSpans()
-    }, 1500)
+        limparSpan('#msg');
+    },1500);
 }

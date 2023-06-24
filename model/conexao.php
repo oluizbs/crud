@@ -1,5 +1,5 @@
 <?php
-	$dsn = "mysql:host=localhost;dbname=cinedesweb2";
+	$dsn = "mysql:host=localhost;dbname=cinedesweb2;charset=utf8";
 	$user = "root";
 	$pass = ""; //Nas máquinas do wamp a senha costuma ser wamp
 	try{
