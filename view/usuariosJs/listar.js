@@ -6,9 +6,9 @@ import{usuarioBuscarFetch} from "./buscar.js";
 //importa a função "usuario buscar fetch" do arquivo "funções uteis"
 $("#btn-novo-jquery").click(function(){
     //resgata o id do botao e adiciona o evento de click que chama a função
-    $("modal-formulario-inserir").modal({backdrop: 'static'});
+    $("#modal-formulario-inserir").modal({backdrop: 'static'});
     //define o modal como estatico
-    $("modal-formulario-inserir").modal('show');
+    $("#modal-formulario-inserir").modal('show');
     //mostra o modal  
 });
 $("#btn-fechar-jquery").click(function(){

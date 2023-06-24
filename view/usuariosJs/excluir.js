@@ -1,5 +1,5 @@
-import { limparSpan, exibirMensagem, exibirMensagemErro } from "../utilJs/funcoesUtil";
-import { usuarioListarFetch } from "./listar";
+import { limparSpan, exibirMensagem, exibirMensagemErro } from "../utilJs/funcoesUtil.js";
+import { usuarioListarFetch } from "./listar.js";
 function usuarioExcluirFetch(id){
     if (confirm('Confirma a exclusao do usuario de id '+id+'?')){
         let usuario = {"id" : id};

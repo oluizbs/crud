@@ -1,5 +1,5 @@
-import { limparSpan, exibirMensagem, exibirMensagemErro } from "../utilJs/funcoesUtil";
-import { usuarioListarFetch} from "./listar";
+import { limparSpan, exibirMensagem, exibirMensagemErro } from "../utilJs/funcoesUtil.js";
+import { usuarioListarFetch} from "./listar.js";
 
 const $btnEnviar = document.querySelector("#enviar");
 $btnEnviar.addEventListener("click", function(event){
@@ -19,5 +19,38 @@ let usuarioInserirFetch = function(){
         ,body: JSON.stringify(usuario)
         ,headers:{"Content-Type":"application/json;charset=UTF-8"}
     };
-    
+    fetch("../controller/usuarioInserir.php", configMetodo)
+    .then(function(resposta){
+        if(!resposta.ok===true){
+            if(!resposta.status===401)
+                window.location.href = "../view/index.html";
+            let msg = resposta.status + " - " + resposta.statusText;
+            throw new Error(msg);
+        }else
+            return resposta.json();
+    })
+    .then(function(respostaJSON){
+        if(respostaJSON.erro===false)
+            fcSucessoInserirusuario(respostaJSON);
+        else
+            fcErroInserirusuario(respostaJSON.msgErro);
+    })
+    .catch(function(erro){
+        fcErroInserirusuario(erro);
+    });
+};
+
+function fcSucessoInserirusuario(respostaJSON){
+    exibirMensagem('#msg', respostaJSON.msgSucesso);
+    setTimeout(function(){
+        limparSpan('#msg');
+        usuarioListarFetch();
+    }, 1500);
+}
+
+function fcErroInserirusuario(respostaJSON){
+    exibirMensagem('#msg', erro);
+    setTimeout(function(){
+        limparSpan('#msg');
+    }, 1500);
 }
