@@ -1,4 +1,4 @@
-import { exibirMensagem,exibirMensagemErro,limparSpan } from "../utilJs/funcoesUtil.js";
+import { exibirMensagem,exibirMensagemErro,limparSpan, fazFetch } from "../utilJs/funcoesUtil.js";
 import { generoListarFetch } from "./listar.js";
 
 //Recupera o elemento input:submit(Também poderíamos usar o form e o mesmo evento submit)        
@@ -10,33 +10,37 @@ $btnEnviar.addEventListener('click', function(event){
 });
 
 let generoInserirFetch = function(){
+    // let genero = {
+    //     "descricao": document.querySelector('#form-inserir').querySelector('#descricao').value,
+    // };
+    // let configMetodo = {
+    //     method: "POST"
+    //     ,body: JSON.stringify(genero)
+    //     ,headers: {"Content-Type":"application/json;charset=UTF-8"}
+    // };
+    // fetch("../controller/generoInserir.php", configMetodo)
+    // .then(function(resposta){
+    //     if(!resposta.ok===true){
+    //         if(resposta.status===401)
+    //             window.location.href = "../view/index.html";
+    //         let msg = resposta.status + " - " + resposta.statusText;
+    //         throw new Error(msg); 
+    //     }else
+    //         return resposta.json();
+    // })
+    // .then(function(respostaJSON){
+    //     if(respostaJSON.erro===false)
+    //         fcSucessoInserirGenero(respostaJSON);
+    //     else
+    //         fcErroInserirGenero(respostaJSON.msgErro);
+    // })
+    // .catch(function(erro){
+    //     fcErroInserirGenero(erro);
+    // });
     let genero = {
-        "descricao": document.querySelector('#form-inserir').querySelector('#descricao').value,
+        "descricao":document.querySelector('#form-inserir').querySelector('#descricao').value,
     };
-    let configMetodo = {
-        method: "POST"
-        ,body: JSON.stringify(genero)
-        ,headers: {"Content-Type":"application/json;charset=UTF-8"}
-    };
-    fetch("../controller/generoInserir.php", configMetodo)
-    .then(function(resposta){
-        if(!resposta.ok===true){
-            if(resposta.status===401)
-                window.location.href = "../view/index.html";
-            let msg = resposta.status + " - " + resposta.statusText;
-            throw new Error(msg); 
-        }else
-            return resposta.json();
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            fcSucessoInserirGenero(respostaJSON);
-        else
-            fcErroInserirGenero(respostaJSON.msgErro);
-    })
-    .catch(function(erro){
-        fcErroInserirGenero(erro);
-    });
+    fazFetch("../controller/generoInserir.php", "POST", genero, fcSucessoInserirGenero, fcErroInserirGenero)
 };
 
 function fcSucessoInserirGenero(respostaJSON){

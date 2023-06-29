@@ -1,4 +1,4 @@
-import { limparSpan, exibirMensagem, exibirMensagemErro } from "../utilJs/funcoesUtil.js";
+import { limparSpan, exibirMensagem, exibirMensagemErro, fazFetch } from "../utilJs/funcoesUtil.js";
 import { usuarioListarFetch} from "./listar.js";
 
 const $btnEnviar = document.querySelector("#enviar");
@@ -14,30 +14,31 @@ let usuarioInserirFetch = function(){
         "login":document.querySelector("#form-inserir").querySelector("#login").value,
         "senha": document.querySelector("#form-inserir").querySelector("#senha").value
     };
-    let configMetodo = {
-        method: "POST"
-        ,body: JSON.stringify(usuario)
-        ,headers:{"Content-Type":"application/json;charset=UTF-8"}
-    };
-    fetch("../controller/usuarioInserir.php", configMetodo)
-    .then(function(resposta){
-        if(!resposta.ok===true){
-            if(!resposta.status===401)
-                window.location.href = "../view/index.html";
-            let msg = resposta.status + " - " + resposta.statusText;
-            throw new Error(msg);
-        }else
-            return resposta.json();
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            fcSucessoInserirusuario(respostaJSON);
-        else
-            fcErroInserirusuario(respostaJSON.msgErro);
-    })
-    .catch(function(erro){
-        fcErroInserirusuario(erro);
-    });
+    fazFetch("../controller/usuarioInserir.php", "POST", usuario, fcErroInserirusuario, fcSucessoInserirusuario );
+    // let configMetodo = {
+    //     method: "POST"
+    //     ,body: JSON.stringify(usuario)
+    //     ,headers:{"Content-Type":"application/json;charset=UTF-8"}
+    // };
+    // fetch("../controller/usuarioInserir.php", configMetodo)
+    // .then(function(resposta){
+    //     if(!resposta.ok===true){
+    //         if(!resposta.status===401)
+    //             window.location.href = "../view/index.html";
+    //         let msg = resposta.status + " - " + resposta.statusText;
+    //         throw new Error(msg);
+    //     }else
+    //         return resposta.json();
+    // })
+    // .then(function(respostaJSON){
+    //     if(respostaJSON.erro===false)
+    //         fcSucessoInserirusuario(respostaJSON);
+    //     else
+    //         fcErroInserirusuario(respostaJSON.msgErro);
+    // })
+    // .catch(function(erro){
+    //     fcErroInserirusuario(erro);
+    // });
 };
 
 function fcSucessoInserirusuario(respostaJSON){
@@ -48,8 +49,8 @@ function fcSucessoInserirusuario(respostaJSON){
     }, 1500);
 }
 
-function fcErroInserirusuario(respostaJSON){
-    exibirMensagem('#msg', erro);
+function fcErroInserirusuario(erro){
+    exibirMensagemErro('#msg', erro);
     setTimeout(function(){
         limparSpan('#msg');
     }, 1500);

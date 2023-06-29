@@ -1,4 +1,4 @@
-import { exibirMensagem, exibirMensagemErro, limparSpan } from "../utilJs/funcoesUtil.js";
+import { exibirMensagem, exibirMensagemErro, limparSpan, fazFetch } from "../utilJs/funcoesUtil.js";
 import { generoExcluirFetch } from "./excluir.js";
 import { generoBuscarFetch } from "./buscar.js";
 
@@ -23,26 +23,28 @@ window.onload = ()=>{
 }
 
 let generoListarFetch = function(){
+    // document.querySelector('tbody').innerHTML="";
+    // fetch("../controller/generoListar.php")
+    // .then(function(resposta){
+    //     if(! resposta.ok===true){
+    //         if(resposta.status===401)
+    //             window.location.href = "../view/index.html";
+    //         let msg = resposta.status + " - " + resposta.statusText;
+    //         throw new Error(msg); 
+    //     }else
+    //         return resposta.json();
+    // })
+    // .then(function(respostaJSON){
+    //     if(respostaJSON.erro===false)
+    //         fcSucessoListarGenero(respostaJSON);
+    //     else
+    //         fcErroListarGenero(respostaJSON.msgErro);
+    // })
+    // .catch(function(erro){
+    //     exibirMensagemErro('#msg',erro);
+    // });
     document.querySelector('tbody').innerHTML="";
-    fetch("../controller/generoListar.php")
-    .then(function(resposta){
-        if(! resposta.ok===true){
-            if(resposta.status===401)
-                window.location.href = "../view/index.html";
-            let msg = resposta.status + " - " + resposta.statusText;
-            throw new Error(msg); 
-        }else
-            return resposta.json();
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            fcSucessoListarGenero(respostaJSON);
-        else
-            fcErroListarGenero(respostaJSON.msgErro);
-    })
-    .catch(function(erro){
-        exibirMensagemErro('#msg',erro);
-    });
+    fazFetch("../controller/generoListar.php", "GET", null, fcSucessoListarGenero, fcErroListarGenero);
 };
 
 function fcSucessoListarGenero(respostaJSON){

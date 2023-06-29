@@ -28,10 +28,31 @@
         </div> 
     </nav>
     <!-- Aqui vai entrar o modal de login -->
+    <div class="modal fade" id="modal-login" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h4 class="modal-title" id="form-titulo">Entre com suas credenciais para logar no sistema</h4>
+                <!-- <button type="button" class="close" data-dismiss="modal"><span>x</span></button> -->
+            </div>
+            <div class="modal-body" id="formulario-login" style="background-color: lightgrey;">
+                <!-- formulario -->
+                <form id="form-login">
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" size="10" required />
+                    <label for="senha'">Senha</label>
+                    <input type="password" id="senha" size="10" required />
+                    <input type="submit" value="Enviar" id="enviar" />
+                </form>
+                <!-- fim do formulario -->
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
     
-    <!-- 
     <script type="module" src="utilJs/funcoesUtil.js"></script>
     <script src="usuariosJs/verificar.js"></script>
-    <script type="module" src="usuariosJs/logar.js"></script> -->
+    <script type="module" src="usuariosJs/logar.js"></script>
 </body>
 </html>

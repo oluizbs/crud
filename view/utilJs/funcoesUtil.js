@@ -19,7 +19,7 @@ const paginaLogin = "../view/index.html";
 function fazFetch(url,metodo,objetoLiteral,cbSucesso,cbErro){
     let configMetodo = {
         method: metodo
-        ,body: JSON.stringify(objetoLiteral)
+        ,body: (objetoLiteral!=null)?JSON.stringify(objetoLiteral):null
         ,headers: {"Content-Type":"application/json;charset=UTF-8"}
     };
     fetch(url, configMetodo)
@@ -40,8 +40,9 @@ function fazFetch(url,metodo,objetoLiteral,cbSucesso,cbErro){
             cbErro(respostaJSON.msgErro);
     })
     .catch(function(erro){
-        cbErroInserirGenero(erro);
-    });
+        cbErro(erro);
+    })
+    .finally(()=>console.log('requisicao encerrada'))
 }
     
-export {limparSpan, exibirMensagem, exibirMensagemErro, fazFetch};
+export {limparSpan, exibirMensagem, exibirMensagemErro, fazFetch, paginaLogin};

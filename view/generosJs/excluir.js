@@ -1,34 +1,38 @@
-import { exibirMensagem, exibirMensagemErro, limparSpan } from "../utilJs/funcoesUtil.js";
+import { exibirMensagem, exibirMensagemErro, limparSpan, fazFetch } from "../utilJs/funcoesUtil.js";
 import { generoListarFetch } from "./listar.js";
 
 function generoExcluirFetch(id){    
-    if(confirm('Confirma a exclusão do genero de id '+id+'?')){ 
-        let genero = {"id": id};
-        let configMetodo = {
-            method: "DELETE"
-            ,body: JSON.stringify(genero)
-            ,headers:{"Content-Type": "application/json;charset=UTF-8"}
-        };
+    // if(confirm('Confirma a exclusão do genero de id '+id+'?')){ 
+    //     let genero = {"id": id};
+    //     let configMetodo = {
+    //         method: "DELETE"
+    //         ,body: JSON.stringify(genero)
+    //         ,headers:{"Content-Type": "application/json;charset=UTF-8"}
+    //     };
 
-        fetch("../controller/generoExcluir.php", configMetodo)
-            .then(function(resposta){
-                if(!resposta.ok===true){
-                    if(resposta.status===401)
-                        window.location.href = "../view/index.html";
-                    let msg = resposta.status + " - " + resposta.statusText;
-                    throw new Error(msg);
-                }else
-                    return resposta.json();
-            })
-            .then(function(respostaJSON){
-                if(respostaJSON.erro===false)
-                    fcSucessoExcluirGenero(respostaJSON);
-                else
-                    fcErroExcluirGenero(respostaJSON.msgErro);
-            })
-            .catch(function(erro){
-                fcErroExcluirGenero(erro);
-            })
+    //     fetch("../controller/generoExcluir.php", configMetodo)
+    //         .then(function(resposta){
+    //             if(!resposta.ok===true){
+    //                 if(resposta.status===401)
+    //                     window.location.href = "../view/index.html";
+    //                 let msg = resposta.status + " - " + resposta.statusText;
+    //                 throw new Error(msg);
+    //             }else
+    //                 return resposta.json();
+    //         })
+    //         .then(function(respostaJSON){
+    //             if(respostaJSON.erro===false)
+    //                 fcSucessoExcluirGenero(respostaJSON);
+    //             else
+    //                 fcErroExcluirGenero(respostaJSON.msgErro);
+    //         })
+    //         .catch(function(erro){
+    //             fcErroExcluirGenero(erro);
+    //         })
+    // }
+    if(confirm('Confirma a exclusao do genero de id' +id+'?')){
+        let genero = {"id":id};
+        fazFetch("../controller/generoBuscar.php", "DELETE", genero, fcSucessoExcluirGenero, fcErroExcluirGenero)
     }
 }
 

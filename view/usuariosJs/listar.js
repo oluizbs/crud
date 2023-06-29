@@ -1,4 +1,4 @@
-import {exibirMensagemErro} from "../utilJs/funcoesUtil.js";
+import {exibirMensagemErro, fazFetch} from "../utilJs/funcoesUtil.js";
 //importa a função "exibir mensagem erro" do arquivo "funções uteis"
 import {usuarioExcluirFetch} from "./excluir.js";
 //importa a função "usuario excluir fetch" do arquivo "funções uteis"
@@ -37,26 +37,32 @@ window.onload = ()=>{
 
 //declarando funcao que sera chamada ao carregar a pagina
 let usuarioListarFetch = function(){
-    document.querySelector("tbody").innerHTML="";
-    fetch("../controller/usuarioListar.php")
-    .then(function(resposta){
-        if(! resposta.ok===true){
-            if(resposta.status===401)
-                window.location.href = "../view/index.html";
-            let msg = resposta.status + " - " + resposta.statusText;
-            throw new Error(msg);
-        }else 
-            return resposta.json();
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            fcSucessoListarUsuario(respostaJSON);
-        else
-            fcErroListarUsuario(respostaJSON.msgErro);
-    })
-    .catch(function(erro){
-        fcErroListarUsuario(erro);
-    });
+    // document.querySelector("tbody").innerHTML="";
+    // fetch("../controller/usuarioListar.php")
+    // .then(function(resposta){
+    //     if(! resposta.ok===true){
+    //         if(resposta.status===401)
+    //             window.location.href = "../view/index.html";
+    //         let msg = resposta.status + " - " + resposta.statusText;
+    //         throw new Error(msg);
+    //     }else 
+    //         return resposta.json();
+    // })
+    // .then(function(respostaJSON){
+    //     if(respostaJSON.erro===false)
+    //         fcSucessoListarUsuario(respostaJSON);
+    //     else
+    //         fcErroListarUsuario(respostaJSON.msgErro);
+    // })
+    // .catch(function(erro){
+    //     fcErroListarUsuario(erro);
+    // });
+    // "nome": document.querySelector('#form-inserir').querySelector('#nome').value,
+    // "login": document.querySelector('#form-inserir').querySelector('#login').value,
+    // "senha": document.querySelector('#form-inserir').querySelector('#senha').value,
+    document.querySelector('tbody').innerHTML="";
+    fazFetch("../controller/usuarioListar.php", "GET", null, fcSucessoListarUsuario, fcErroListarUsuario)
+
 };
 
 function fcSucessoListarUsuario(respostaJSON){

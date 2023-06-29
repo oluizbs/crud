@@ -1,24 +1,24 @@
-import {exibirMensagem, exibirMensagemErro, limparSpan} from"../utilJs/funcoesUtil.js";
+import {exibirMensagem, exibirMensagemErro, limparSpan, fazFetch} from"../utilJs/funcoesUtil.js";
 function usuarioBuscarFetch(id){
-    fetch("../controller/usuarioBuscar.php?id="+id+"")
-    .then(function(resposta){
-        if(!resposta.ok===true){
-            if(resposta.status===401)
-                window.location.href = "../view/index.html";
-            let msg = resposta.status + "" + resposta.statusText;
-            throw new Error(msg);
-        }else
-            return resposta.json();
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            fcSucessoBuscarusuario(respostaJSON);
-        else 
-            fcErroBuscarusuario(respostaJSON.msgErro);
-    })
-    .catch(function(erro){
-        exibirMensagemErro("#msg", erro);
-    });
+    fetch("../controller/usuarioBuscar.php?id="+id+"", "GET", null, fcErroBuscarusuario, fcSucessoBuscarusuario)
+    // .then(function(resposta){
+    //     if(!resposta.ok===true){
+    //         if(resposta.status===401)
+    //             window.location.href = "../view/index.html";
+    //         let msg = resposta.status + "" + resposta.statusText;
+    //         throw new Error(msg);
+    //     }else
+    //         return resposta.json();
+    // })
+    // .then(function(respostaJSON){
+    //     if(respostaJSON.erro===false)
+    //         fcSucessoBuscarusuario(respostaJSON);
+    //     else 
+    //         fcErroBuscarusuario(respostaJSON.msgErro);
+    // })
+    // .catch(function(erro){
+    //     exibirMensagemErro("#msg", erro);
+    // });
 }
 
 function fcSucessoBuscarusuario(respostaJSON){
